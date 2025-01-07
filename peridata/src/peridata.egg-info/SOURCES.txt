@@ -1,0 +1,8 @@
+LICENSE
+README.md
+pyproject.toml
+src/peridata/__init__.py
+src/peridata.egg-info/PKG-INFO
+src/peridata.egg-info/SOURCES.txt
+src/peridata.egg-info/dependency_links.txt
+src/peridata.egg-info/top_level.txt
