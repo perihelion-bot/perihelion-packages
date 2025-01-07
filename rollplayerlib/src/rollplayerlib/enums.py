@@ -12,6 +12,7 @@ class OperationEnum(StrEnum):
     MULTIPLY = '*'
     DIVIDE = '/'
     POW = '^'
+    MOD = '%'
 
 class FormatEnum(StrEnum):
     LIST = 'l'

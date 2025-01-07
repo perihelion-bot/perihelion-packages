@@ -39,6 +39,8 @@ class Bonus(ABCBonus):
                 new_dice.append(i * self.value)
             if self.operation == "^":
                 new_dice.append(i ** self.value)
+            if self.operation == "%":
+                new_dice.append(i % self.value)
         return new_dice
 
     @classmethod
@@ -98,6 +100,8 @@ class TargetedBonus(ABCBonus):
                         temp_dice[i] = dice_val * operation[1]
                     elif operation[0] == "^":
                         temp_dice[i] = dice_val ** operation[1]
+                    elif operation[0] == "%":
+                        temp_dice[i] = dice_val % operation[1]
             # Update new_dice with the results of the current operation
             new_dice = temp_dice[:]
 
