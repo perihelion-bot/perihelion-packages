@@ -67,9 +67,9 @@ class RollResult:
         rounded_nums = [int(x) if abs(x - round(x)) < 0.000000001 else x for x in numbers]
         if self.threshold is not None:
             passing_nums = self.threshold.passing(rounded_nums)
-            return [f'**{x}**' if pass_result else str(x) for x, pass_result in zip(rounded_nums, passing_nums)]
+            return [(f'**{round(x,4)}**' if type(x) == float else f'**{x}**') if pass_result else (f'{round(x,4)}' if type(x) == float else str(x)) for x, pass_result in zip(rounded_nums, passing_nums)]
         else:
-            return [str(x) for x in rounded_nums]
+            return [f'{round(x,4)}' if type(x) == float else str(x) for x in rounded_nums]
 
     def _format_rolls(self, rolls: List[int]):
         # Convert numbers close to an integer to int, then to string

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rollplayerlib"
-version = "0.5.7"
+version = "0.5.11.0.0.0.0.0.0.0.0.0.0.0.1"
 license = { text = "MIT" }
 authors = [{ name = "whirlingstars", email = "infernity@infernity.dev" }]
 keywords = ["DICE", "ROLL", "RANDOM"]

@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
+import random
 from typing import Generic, TypeVar, List
+
+from .config import MAX_DICE
 from .enums import OperationEnum
 from .exceptions import BonusParseException
 
@@ -9,6 +12,9 @@ ABCBonusTypeVar = TypeVar('ABCBonusTypeVar', bound='ABCBonus')
 class ABCBonus(ABC, Generic[ABCBonusTypeVar]):
     @abstractmethod
     def apply_bonus(self, rolled_dice: List[int]) -> List[int]: ...
+    
+    @property
+    def value(self) -> float | int: ...
 
     @classmethod
     @abstractmethod
@@ -16,12 +22,18 @@ class ABCBonus(ABC, Generic[ABCBonusTypeVar]):
 
 
 class Bonus(ABCBonus):
-    def __init__(self, operation, value):
+    def __init__(self, operation, bonus_value):
         self.operation = operation
-        self.value = value
+        self.bonus_value = bonus_value
+    
+    @property
+    def value(self):
+        if type(self.bonus_value) == tuple:
+            return sum([random.randint(1, self.bonus_value[1]) for _ in range(self.bonus_value[0])])
+        return self.bonus_value
 
     def __repr__(self):
-        return f"Bonus(operation={self.operation}, value={self.value})"
+        return f"Bonus(operation={self.operation}, bonus_value={self.bonus_value})"
 
     def apply_bonus(self, rolled_dice: List[int]) -> List[int]:
         new_dice = []
@@ -46,25 +58,39 @@ class Bonus(ABCBonus):
     @classmethod
     def parse(cls, input_string) -> List['Bonus']:
         bonuses = []
-        current_num = ''
+        current_val = ''
         current_op = None
 
         for char in input_string:
             if char in [op.value for op in OperationEnum]:  # Check if char is an operation
-                if current_num:  # If there's a number buffered, create a Bonus
-                    bonuses.append(Bonus(current_op, float(current_num)))
-                    current_num = ''  # Reset current number
+                if current_val:  # If there's a number buffered, create a Bonus
+                    bonuses.append(Bonus(current_op, float(current_val)))
+                    current_val = ''  # Reset current number
                 current_op = OperationEnum(char)  # Set current operation
             else:
-                current_num += char  # Buffer the number
+                current_val += char  # Buffer the number
 
         # Handle the last buffered number
-        if current_num and current_op:
+        if current_val and current_op:
             try:
-                current_num = float(current_num)
+                current_val = float(current_val)
             except ValueError as e:
-                raise ValueError(f"The number provided to be parsed as a bonus is unparsable! ({current_num})")
-            bonuses.append(Bonus(current_op, float(current_num)))
+                try:
+                    if "d" in current_val:
+                        if current_val.startswith('d'):
+                            count, sides = 1, int(current_val[1:])
+                        else:
+                            count, sides = current_val.split('d')
+                            count = int(count)
+                            if count > int(MAX_DICE / 10):
+                                raise MemoryError(f"You can't roll more than {int(MAX_DICE / 10):,} dice for a subroll! (Tried rolling {count:,} dice)")
+                            sides = int(sides)
+                    else:
+                        raise ValueError
+                    current_val = (count, sides)
+                except ValueError as e:
+                    raise ValueError(f"The number provided to be parsed as a bonus is unparsable! ({current_val})")
+            bonuses.append(Bonus(current_op, current_val))
 
         return bonuses
 
