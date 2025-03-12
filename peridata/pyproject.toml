@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "peridata"
-version = "1.3.3"
-license = { text = "MIT" }
+version = "1.3.3.post1"
+license = { text = "Unlicense" }
 authors = [{ name = "whirlingstars", email = "infernity@infernity.dev" }]
 keywords = ["STORAGE"]
 classifiers = [
