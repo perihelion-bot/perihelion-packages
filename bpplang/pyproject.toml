@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bpplang"
+version = "0.1.1"
+license = { text = "MIT" }
+authors = [{ name = "whirlingstars", email = "infernity@infernity.dev" }]
+keywords = ["STORAGE"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13"
+]
+description = "The B++ programming language, standalone."
+readme = "README.md"
